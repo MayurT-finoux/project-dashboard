@@ -1,4 +1,7 @@
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ['simple-git'],
+  },
   reactStrictMode: true,
 }
 
