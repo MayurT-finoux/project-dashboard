@@ -33,6 +33,8 @@ export default function ProjectCard({ project }: { project: Project }) {
       }
 
       setStatus(newStatus)
+      // Trigger parent refresh
+      window.dispatchEvent(new CustomEvent('projectUpdated'))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {

@@ -32,6 +32,15 @@ export default function ProjectGrid() {
     loadProjects()
   }, [])
 
+  useEffect(() => {
+    const handleProjectUpdated = () => {
+      loadProjects()
+    }
+
+    window.addEventListener('projectUpdated', handleProjectUpdated)
+    return () => window.removeEventListener('projectUpdated', handleProjectUpdated)
+  }, [])
+
   const handleProjectAdded = (project: Project) => {
     setProjects((current) => [project, ...current])
   }
