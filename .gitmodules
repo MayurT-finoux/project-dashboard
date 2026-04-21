@@ -1,3 +1,6 @@
 [submodule "docs/plans"]
 	path = docs/plans
 	url = https://github.com/MayurT-finoux/project_plans
+[submodule "design"]
+	path = design
+	url = https://github.com/MayurT-finoux/Projectdashboarddesign

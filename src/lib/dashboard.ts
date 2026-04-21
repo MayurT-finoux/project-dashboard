@@ -1,5 +1,4 @@
-import { promises as fs } from 'fs'
-import { DASHBOARD_PATH } from '@/lib/config'
+import { getFile, writeFile } from '@/lib/github'
 import type { Status } from '@/types/project'
 
 const STATUS_SYMBOLS: Record<Status, string> = {
@@ -48,8 +47,8 @@ function buildStatsBlock(counts: Record<Status, number>) {
 }
 
 export async function updateDashboardRow(slug: string, status: Status, lastUpdated: string, description: string, started: string) {
-  const raw = await fs.readFile(DASHBOARD_PATH, 'utf8')
-  const lines = raw.split('\n')
+  const raw = await getFile('DASHBOARD.md')
+  const lines = raw.content.split('\n')
   const headerLine = lines.findIndex((line) => line.trim() === '| Status | Project | Description | Started | Last Updated |')
   const separatorLine = lines.findIndex((line, index) => index > headerLine && line.trim().startsWith('|---'))
   const tableEnd = lines.findIndex((line, index) => index > separatorLine && line.trim() === '---')
@@ -63,8 +62,8 @@ export async function updateDashboardRow(slug: string, status: Status, lastUpdat
     if (index < rowStart || (tableEnd !== -1 && index >= tableEnd)) {
       return false
     }
-    return new RegExp(`^\|\s*${STATUS_SYMBOLS[status]}\s*\|\s*\[${slug}\]\(projects/${slug}/plan.md\)`).test(line) ||
-      new RegExp(`^\|\s*[^|]+\s*\|\s*\[${slug}\]\(projects/${slug}/plan.md\)`).test(line)
+    return new RegExp(`^\\|\\s*${STATUS_SYMBOLS[status]}\\s*\\|\\s*\\[${slug}\\]\\(projects/${slug}/plan\.md\\)`).test(line) ||
+      new RegExp(`^\\|\\s*[^|]+\\s*\\|\\s*\\[${slug}\\]\\(projects/${slug}/plan\.md\\)`).test(line)
   })
 
   if (projectRowIndex >= 0) {
@@ -83,5 +82,5 @@ export async function updateDashboardRow(slug: string, status: Status, lastUpdat
   const updatedLines = statsStart >= 0 ? lines.slice(0, statsStart) : lines
   const result = [...updatedLines, buildStatsBlock(counts)].join('\n')
 
-  await fs.writeFile(DASHBOARD_PATH, result, 'utf8')
+  await writeFile('DASHBOARD.md', result, `chore: update dashboard for ${slug}`, raw.sha)
 }

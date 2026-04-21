@@ -1,25 +1,89 @@
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
 import type { Status } from '@/types/project'
 
-const STATUS_STYLES: Record<Status, string> = {
-  Planning: 'bg-sky-500/15 text-sky-200 ring-sky-500/30',
-  Active: 'bg-emerald-500/15 text-emerald-200 ring-emerald-500/30',
-  Paused: 'bg-amber-400/15 text-amber-200 ring-amber-400/30',
-  Complete: 'bg-lime-400/15 text-lime-200 ring-lime-400/30',
-  Abandoned: 'bg-rose-500/15 text-rose-200 ring-rose-500/30',
+const statusConfig = {
+  Active: { emoji: '🟢', bg: 'var(--status-active-bg)', text: 'var(--status-active-text)' },
+  Planning: { emoji: '🔵', bg: 'var(--status-planning-bg)', text: 'var(--status-planning-text)' },
+  Paused: { emoji: '🟡', bg: 'var(--status-paused-bg)', text: 'var(--status-paused-text)' },
+  Complete: { emoji: '✅', bg: 'var(--status-complete-bg)', text: 'var(--status-complete-text)' },
+  Abandoned: { emoji: '❌', bg: 'var(--status-abandoned-bg)', text: 'var(--status-abandoned-text)' },
 }
 
-export default function StatusBadge({ status }: { status: Status }) {
-  const labelMap: Record<Status, string> = {
-    Planning: '🔵 Planning',
-    Active: '🟢 Active',
-    Paused: '🟡 Paused',
-    Complete: '✅ Complete',
-    Abandoned: '❌ Abandoned',
+interface StatusBadgeProps {
+  status: Status
+  onStatusChange?: (newStatus: Status) => void
+}
+
+export default function StatusBadge({ status, onStatusChange }: StatusBadgeProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const config = statusConfig[status]
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
+  const handleStatusSelect = (newStatus: Status) => {
+    onStatusChange?.(newStatus)
+    setIsOpen(false)
   }
 
   return (
-    <span className={`inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium ring-1 ${STATUS_STYLES[status]}`}>
-      {labelMap[status]}
-    </span>
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="rounded-full px-2.5 py-1 transition-opacity hover:opacity-80"
+        style={{
+          backgroundColor: config.bg,
+          color: config.text,
+          fontSize: '12px',
+          fontWeight: 500,
+        }}
+      >
+        {config.emoji} {status}
+      </button>
+
+      {isOpen && (
+        <div
+          className="absolute top-full left-0 mt-1 w-[180px] rounded-lg border shadow-lg z-10"
+          style={{
+            backgroundColor: 'var(--bg-card)',
+            borderColor: 'var(--border)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+          }}
+        >
+          {(Object.keys(statusConfig) as Status[]).map((s) => (
+            <button
+              key={s}
+              onClick={() => handleStatusSelect(s)}
+              className="w-full h-9 px-3 flex items-center justify-between hover:bg-zinc-800 transition-colors first:rounded-t-lg last:rounded-b-lg"
+              style={{
+                fontSize: '14px',
+                color: 'var(--text-primary)',
+              }}
+            >
+              <span>
+                {statusConfig[s].emoji} {s}
+              </span>
+              {s === status && <span>✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }

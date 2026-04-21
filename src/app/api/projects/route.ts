@@ -1,23 +1,20 @@
 import { NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
-import { PROJECTS_DIR } from '@/lib/config'
 import { createProjectPlan, parsePlanMeta, readPlanFile } from '@/lib/markdown'
 import { updateDashboardRow } from '@/lib/dashboard'
-import { commitNewProject, updateParentSubmodulePointer } from '@/lib/git'
+import { listDir } from '@/lib/github'
 import type { Project, Status } from '@/types/project'
 
 export async function GET() {
-  const entries = await fs.readdir(PROJECTS_DIR, { withFileTypes: true })
+  const entries = await listDir('projects')
   const projects: Project[] = []
 
   for (const entry of entries) {
-    if (!entry.isDirectory()) {
+    if (entry.type !== 'dir') {
       continue
     }
 
     const slug = entry.name
-    const planPath = path.join(PROJECTS_DIR, slug, 'plan.md')
+    const planPath = `projects/${slug}/plan.md`
 
     try {
       const content = await readPlanFile(planPath)
@@ -64,8 +61,6 @@ export async function POST(request: Request) {
   try {
     const project = await createProjectPlan({ slug, name, description, status, tags, started })
     await updateDashboardRow(slug, status, project.meta.lastUpdated, description, started)
-    await commitNewProject(slug)
-    await updateParentSubmodulePointer()
     return NextResponse.json(project)
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })

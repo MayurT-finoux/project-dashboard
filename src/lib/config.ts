@@ -1,15 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-
-export const REPO_ROOT = process.env.PLANS_REPO_PATH
-  ? path.resolve(process.env.PLANS_REPO_PATH)
-  : path.resolve(process.cwd(), 'docs', 'plans')
-
-export const PROJECTS_DIR = path.join(REPO_ROOT, 'projects')
-export const DASHBOARD_PATH = path.join(REPO_ROOT, 'DASHBOARD.md')
-
-if (!fs.existsSync(REPO_ROOT)) {
-  throw new Error(
-    `PLANS_REPO_PATH does not resolve to a valid directory: ${REPO_ROOT}`
-  )
-}
+export const GITHUB_OWNER = process.env.GITHUB_OWNER || 'MayurT-finoux'
+export const GITHUB_REPO = process.env.GITHUB_REPO || 'project_plans'
+export const GITHUB_TOKEN = process.env.PLANS_GITHUB_TOKEN || process.env.GITHUB_TOKEN || ''
