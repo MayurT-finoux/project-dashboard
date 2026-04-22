@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { parsePlanMeta, readPlanFile, writeStatusToPlan } from '@/lib/markdown'
 import { updateDashboardRow } from '@/lib/dashboard'
 
-const VALID_STATUSES = ['Planning', 'Active', 'Paused', 'Complete', 'Abandoned'] as const
+const VALID_STATUSES = ['Planning', 'Active', 'Paused', 'Complete', 'Scrapped', 'Idea'] as const
 
 type Status = (typeof VALID_STATUSES)[number]
 

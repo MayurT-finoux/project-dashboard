@@ -63,8 +63,10 @@ export default function Home() {
   const stats = {
     Active: projects.filter((p) => p.meta.status === 'Active').length,
     Paused: projects.filter((p) => p.meta.status === 'Paused').length,
+    Planning: projects.filter((p) => p.meta.status === 'Planning').length,
     Complete: projects.filter((p) => p.meta.status === 'Complete').length,
-    Abandoned: projects.filter((p) => p.meta.status === 'Abandoned').length,
+    Scrapped: projects.filter((p) => p.meta.status === 'Scrapped').length,
+    Idea: projects.filter((p) => p.meta.status === 'Idea').length,
   }
 
   return (
@@ -128,6 +130,15 @@ export default function Home() {
           </div>
           <div className="w-px h-4 bg-zinc-700" />
           <div className="flex items-center gap-2">
+            <span style={{ color: 'var(--text-secondary)' }}>Planning:</span>
+            <span
+              style={{ color: 'var(--text-primary)', fontWeight: 600 }}
+            >
+              {stats.Planning}
+            </span>
+          </div>
+          <div className="w-px h-4 bg-zinc-700" />
+          <div className="flex items-center gap-2">
             <span style={{ color: 'var(--text-secondary)' }}>Complete:</span>
             <span
               style={{ color: 'var(--text-primary)', fontWeight: 600 }}
@@ -137,11 +148,20 @@ export default function Home() {
           </div>
           <div className="w-px h-4 bg-zinc-700" />
           <div className="flex items-center gap-2">
-            <span style={{ color: 'var(--text-secondary)' }}>Abandoned:</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Scrapped:</span>
             <span
               style={{ color: 'var(--text-primary)', fontWeight: 600 }}
             >
-              {stats.Abandoned}
+              {stats.Scrapped}
+            </span>
+          </div>
+          <div className="w-px h-4 bg-zinc-700" />
+          <div className="flex items-center gap-2">
+            <span style={{ color: 'var(--text-secondary)' }}>Idea:</span>
+            <span
+              style={{ color: 'var(--text-primary)', fontWeight: 600 }}
+            >
+              {stats.Idea}
             </span>
           </div>
         </div>

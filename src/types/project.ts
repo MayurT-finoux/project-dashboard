@@ -1,4 +1,4 @@
-export type Status = 'Planning' | 'Active' | 'Paused' | 'Complete' | 'Abandoned'
+export type Status = 'Planning' | 'Active' | 'Paused' | 'Complete' | 'Scrapped' | 'Idea'
 
 export interface ProjectMeta {
   status: Status

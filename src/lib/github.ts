@@ -1,11 +1,19 @@
 import { Octokit } from '@octokit/rest'
 import { GITHUB_OWNER, GITHUB_REPO, GITHUB_TOKEN } from '@/lib/config'
 
-if (!GITHUB_TOKEN) {
-  throw new Error('GITHUB_TOKEN is required in environment variables')
-}
+let octokit: Octokit | null = null
 
-const octokit = new Octokit({ auth: GITHUB_TOKEN })
+function getOctokit(): Octokit {
+  if (!GITHUB_TOKEN) {
+    throw new Error('GITHUB_TOKEN is required in environment variables')
+  }
+  
+  if (!octokit) {
+    octokit = new Octokit({ auth: GITHUB_TOKEN })
+  }
+  
+  return octokit
+}
 
 export interface GitHubFile {
   content: string
@@ -13,6 +21,7 @@ export interface GitHubFile {
 }
 
 export async function getFile(path: string): Promise<GitHubFile> {
+  const octokit = getOctokit()
   const { data } = await octokit.repos.getContent({ owner: GITHUB_OWNER, repo: GITHUB_REPO, path })
   if (Array.isArray(data)) {
     throw new Error(`${path} is a directory`)
@@ -28,6 +37,7 @@ export async function getFile(path: string): Promise<GitHubFile> {
 
 export async function writeFile(path: string, content: string, message: string, sha?: string) {
   try {
+    const octokit = getOctokit()
     await octokit.repos.createOrUpdateFileContents({
       owner: GITHUB_OWNER,
       repo: GITHUB_REPO,
@@ -44,6 +54,7 @@ export async function writeFile(path: string, content: string, message: string, 
 }
 
 export async function listDir(path: string) {
+  const octokit = getOctokit()
   const { data } = await octokit.repos.getContent({ owner: GITHUB_OWNER, repo: GITHUB_REPO, path })
   if (!Array.isArray(data)) {
     throw new Error(`${path} is not a directory`)

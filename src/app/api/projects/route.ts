@@ -35,7 +35,7 @@ export async function GET() {
   return NextResponse.json(projects)
 }
 
-const VALID_STATUSES = ['Planning', 'Active', 'Paused', 'Complete', 'Abandoned'] as const
+const VALID_STATUSES = ['Planning', 'Active', 'Paused', 'Complete', 'Scrapped', 'Idea'] as const
 
 export async function POST(request: Request) {
   const payload = await request.json().catch(() => null)

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { Project, Status } from '@/types/project'
 import StatusBadge from './StatusBadge'
 
-const VALID_STATUSES: Status[] = ['Planning', 'Active', 'Paused', 'Complete', 'Abandoned']
+const VALID_STATUSES: Status[] = ['Planning', 'Active', 'Paused', 'Complete', 'Scrapped', 'Idea']
 
 export default function ProjectCard({ project }: { project: Project }) {
   const [status, setStatus] = useState<Status>(project.meta.status)

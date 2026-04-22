@@ -6,7 +6,8 @@ const STATUS_LABELS: Record<Status, string> = {
   Active: '🟢 Active',
   Paused: '🟡 Paused',
   Complete: '✅ Complete',
-  Abandoned: '❌ Abandoned',
+  Scrapped: '❌ Scrapped',
+  Idea: '💡 Idea',
 }
 
 const stripMarkdown = (text: string) => text.replace(/\n/g, ' ').replace(/\*\*|__|\*|_/g, '').trim()

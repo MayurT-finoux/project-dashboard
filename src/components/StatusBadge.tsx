@@ -5,10 +5,11 @@ import type { Status } from '@/types/project'
 
 const statusConfig = {
   Active: { emoji: '🟢', bg: 'var(--status-active-bg)', text: 'var(--status-active-text)' },
-  Planning: { emoji: '🔵', bg: 'var(--status-planning-bg)', text: 'var(--status-planning-text)' },
   Paused: { emoji: '🟡', bg: 'var(--status-paused-bg)', text: 'var(--status-paused-text)' },
+  Planning: { emoji: '🔵', bg: 'var(--status-planning-bg)', text: 'var(--status-planning-text)' },
   Complete: { emoji: '✅', bg: 'var(--status-complete-bg)', text: 'var(--status-complete-text)' },
-  Abandoned: { emoji: '❌', bg: 'var(--status-abandoned-bg)', text: 'var(--status-abandoned-text)' },
+  Scrapped: { emoji: '❌', bg: 'var(--status-scrapped-bg)', text: 'var(--status-scrapped-text)' },
+  Idea: { emoji: '💡', bg: 'var(--status-idea-bg)', text: 'var(--status-idea-text)' },
 }
 
 interface StatusBadgeProps {

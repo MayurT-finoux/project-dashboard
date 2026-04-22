@@ -210,7 +210,8 @@ export default function AddProjectModal({ isOpen, onClose, onSubmit }: AddProjec
               <option value="Active">Active</option>
               <option value="Paused">Paused</option>
               <option value="Complete">Complete</option>
-              <option value="Abandoned">Abandoned</option>
+              <option value="Scrapped">Scrapped</option>
+              <option value="Idea">Idea</option>
             </select>
           </div>
 

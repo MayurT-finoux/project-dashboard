@@ -6,7 +6,8 @@ const STATUS_SYMBOLS: Record<Status, string> = {
   Active: '🟢',
   Paused: '🟡',
   Complete: '✅',
-  Abandoned: '❌',
+  Scrapped: '❌',
+  Idea: '💡',
 }
 
 function formatTableRow(slug: string, status: Status, description: string, started: string, lastUpdated: string) {
@@ -19,7 +20,8 @@ function countStatuses(lines: string[]) {
     Active: 0,
     Paused: 0,
     Complete: 0,
-    Abandoned: 0,
+    Scrapped: 0,
+    Idea: 0,
   }
 
   for (const line of lines) {
@@ -41,8 +43,10 @@ function buildStatsBlock(counts: Record<Status, number>) {
     '',
     `- **Active:** ${counts.Active}`,
     `- **Paused:** ${counts.Paused}`,
+    `- **Planning:** ${counts.Planning}`,
     `- **Complete:** ${counts.Complete}`,
-    `- **Abandoned:** ${counts.Abandoned}`,
+    `- **Scrapped:** ${counts.Scrapped}`,
+    `- **Idea:** ${counts.Idea}`,
   ].join('\n')
 }
 
